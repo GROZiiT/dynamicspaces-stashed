@@ -17,11 +17,10 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="https://www.paypal.com/sdk/js?client-id=AQcTcfpYw5aSGXGbVCOxXpzm-IJX8OCqPdLDDQtt3JW-8ZJ6FSballJ7DRcKxEacYNCKX3bLPJm41ARI&vault=true&intent=subscription"
-                                                data-sdk-integration-source="button-factory"></script>
+            data-sdk-integration-source="button-factory"></script>
     <script>
-        var msg={{ msg }};
-        if(msg!=="")
-        {
+        var msg ="{{ msg }}";
+        if (msg !== "") {
             alert(msg);
         }
     </script>
@@ -188,6 +187,10 @@
                                 {% if not profile.subscriber %}
                                     <div id="paypal-button-container-P-6BF12586M37432226MSVHFNA"
                                          class="col-lg-6 mx-auto">
+                                    <form method="post" action="payment" id="paymentform">
+                                        {% csrf_token %}
+                                        <input type="hidden" id="subscriptionID" name="subscriptionID">
+                                    </form>
                                         <h5 class="card-title" style="text-align: center">Choose a payment method</h5>
                                         <script>
                                             paypal.Buttons({
@@ -204,7 +207,8 @@
                                                     });
                                                 },
                                                 onApprove: function (data, actions) {
-                                                    alert(data.subscriptionID); // You can add optional success message for the subscriber here
+                                                    $("#subscriptionID").val(data.subscriptionID);
+                                                    $("#paymentform").submit();
                                                 }
                                             }).render('#paypal-button-container-P-6BF12586M37432226MSVHFNA'); // Renders the PayPal button
                                         </script>
@@ -217,8 +221,7 @@
 
                                             <div class="col-md-8 col-lg-9 mx-auto">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade"
-                                                    >
+                                                    <input class="form-check-input" type="checkbox" id="changesMade">
                                                     <label class="form-check-label" for="changesMade">
                                                         Cancel Subscription
                                                     </label>

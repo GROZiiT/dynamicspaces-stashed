@@ -10,7 +10,6 @@ from django import template
 register = template.Library()
 client_id = 'AZbjl24UxpurpCWivsPxyAYCbHNkoTgoPxMcHXp0vlEWItKQ_s1PY9YTAXqk540STaqwzKrzihlMCnw0'
 client_key = 'EDXoiu_RvG2otCBFGTHbfM2z08LnGLzEKGFpFQt22HpS2RWG1ADutj9PIJ-xCWnrBe-ynERD_stCPAP_'
-own_key = 'LionTrades_Subscription'
 
 def get_access_token():
     data = {
@@ -25,17 +24,17 @@ def payment(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
     try:
-        user = Jobs.objects.get(username=request.session['email'])
-
+        user = Profiles.objects.get(email=request.session['email'])
         headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + get_access_token(),
         }
-
+        print("Hiiiiiiiii", request.POST['subscriptionID'])
         subscriptions_response = requests.get(
             'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/' + request.POST['subscriptionID'],
             headers=headers)
 
+        print("rggdf",request.POST['subscriptionID'])
         user.subscriber_id = request.POST['subscriptionID']
         user.subscriber = True
         user.save()
@@ -289,10 +288,11 @@ def tables_general(request):
 def users_profile(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
+
     if "message" not in request.session.keys():
         request.session["message"]=""
     msg,request.session["message"]=request.session["message"],""
-    return render(request, "users-profile.html",{"msg":msg})
+    return render(request, "users-profile.html",{"msg":msg,"profile":Profiles.objects.get(email=request.session['email'])})
 
 def cancelsub(request):
     if not logged_in(request):
