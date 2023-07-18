@@ -118,6 +118,11 @@ def add_post(request):
         return HttpResponseRedirect('pages-login')
     return render(request, "add-post.html")
 
+def edit_post(request):
+    if not logged_in(request):
+        return HttpResponseRedirect('pages-login')
+    return render(request, "add-post.html")
+
 def adding_job(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
@@ -140,6 +145,27 @@ def adding_job(request):
         print(e)
         return HttpResponseRedirect('add-post')
 
+def editing_job(request):
+    if not logged_in(request):
+        return HttpResponseRedirect('pages-login')
+    try:
+        job =Jobs()
+        job.title=request.POST['title']
+        job.sdescription = request.POST['sdescription']
+        job.description = request.POST['description']
+        job.location = request.POST['location']
+        job.eemail = request.POST['eemail']
+        job.company = request.POST['company']
+        job.logo_img_url = request.POST['logo_img_url']
+        job.expire_in_days = request.POST['expire_in_days']
+        job.background_img_url = request.POST['background_img_url']
+        job.keywords = request.POST['keywords']
+        job.posted_by= request.session['email']
+        job.save()
+        return HttpResponseRedirect('index')
+    except Exception as e:
+        print(e)
+        return HttpResponseRedirect('add-post')
 
 def GroziitDynamicSpace(request):
     if not logged_in(request):

@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Post</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+
+    {% include "metafiles.html" %}
+    <script src="{% static 'assets/ckeditor/adapters/jquery.js' %}"></script>
+    <script src="{% static 'assets/ckeditor/ckeditor.js' %}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+{% include "header.html" %}
+
+{% include "sidenav.html" %}
+
+<main id="main" class="main">
+
+    <div class="Jobposting">
+        <h1>Add Job Posting</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index">Home</a></li>
+                <li class="breadcrumb-item active">Add Posting</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+
+                <!-- Profile Edit Form -->
+                <form method="post" action="adding-job">
+                    {% csrf_token %}
+                    {#                    <div class="row mb-3">#}
+                    {#                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>#}
+                    {#                        <div class="col-md-8 col-lg-9">#}
+                    {#                            <img src="../static/assets/img/profile-img.jpg" alt="Profile">#}
+                    {#                            <div class="pt-2">#}
+                    {#                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i#}
+                    {#                                        class="bi bi-upload"></i></a>#}
+                    {#                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i#}
+                    {#                                        class="bi bi-trash"></i></a>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="title" type="text" class="form-control" id="title" value="" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Company Name</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="company" type="text" class="form-control" id="company" value="" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Description Gist</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="sdescription" type="text" class="form-control" id="sdescription" value=""
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="about" class="col-md-4 col-lg-3 col-form-label">Job Description</label>
+                        <div class="col-md-8 col-lg-9">
+                            <div id="toolbar-container">
+                                <textarea name="ckdescription" id="ckdescription"
+                                          style="border: 1px solid #ced4da;border-radius: 0.375rem;"></textarea>
+                                <input name="description" id="description" type="hidden">
+                                <script>
+                                    CKEDITOR.replace('ckdescription');
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Location</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="location" type="text" class="form-control" id="location" value="" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Employer Email</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="eemail" type="text" class="form-control" id="eemail" value="" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Keywords</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="keywords" type="text" class="form-control" id="keywords"
+                                   placeholder="Python,Full Stack,etc.(comma-separated values)">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Logo Image URL</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="logo_img_url" type="text" class="form-control" id="logo_img_url">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Background Image URL</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="background_img_url" type="text" class="form-control" id="background_img_url">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Due Date</label>
+                        <div class="col-md-8 col-lg-9">
+                            <input name="expire_in_days" type="date" class="form-control" id="expire_in_days" value="">
+                        </div>
+                    </div>
+
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" id="submit">Add Job</button>
+                        <script>
+                            $("#submit").click(function () {
+                                $("#description").val(CKEDITOR.instances['ckdescription'].getData());
+                            });
+                        </script>
+                    </div>
+                </form><!-- End Profile Edit Form -->
+
+            </div>
+        </div>
+    </section>
+</main>
+
+{% include "footer-meta-files.html" %}
+</body>
+
+
+</html>

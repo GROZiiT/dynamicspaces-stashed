@@ -778,6 +778,11 @@
             margin-left: auto;
         }
 
+        .job-action:hover {
+            cursor: pointer;
+        }
+
+
         .job-action i {
             width: 32px;
             border: 1px solid var(--border-color);
@@ -1101,7 +1106,7 @@
                 <div class="job-explain-content">
                     <div class="job-title-wrapper">
                         <div class="job-card-title">{{ job.title }}</div>
-                        <div class="job-action">
+                        <div class="job-action" onclick="history.back();">
                             <i class="bi bi-chevron-compact-left"></i>
                         </div>
                     </div>

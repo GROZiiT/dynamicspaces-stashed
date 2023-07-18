@@ -215,7 +215,7 @@
                                     </div>
                                 {% else %}
                                     <form action="cancelsub" method="post">
-
+                                    {% csrf_token %}
                                         <div class="row mb-3">
                                             <h5 class="card-title" style="text-align: center">Subscription Settings</h5>
 
