@@ -11,6 +11,7 @@
   <meta content="" name="keywords">
 
 {% include "metafiles.html" %}
+    {% include 'alerts.html' %}
 
 
 </head>
@@ -74,12 +75,12 @@
                     <tbody class="jobs_list">
                     {% for i in jobs %}
                       <tr>
-                        <th scope="row"><a href="#">#{{ i.id }}</a></th>
+                        <th scope="row"><a href="edit-post?id={{ i.id }}">#{{ i.id }}</a></th>
                         <td >{{ i.title }}</td>
                         <td><a href="#" class="text-primary">{{ i.eemail}}</a></td>
                         <td>{{ i.location }}</td>
                           <td>{{ i.expire_in_days }}</td>
-                        <td style="align-content: center"><i class="bi bi-pencil-square text-primary" ></i></td>
+                          <td style="align-content: center"><a href="edit-post?id={{ i.id }}" class="text-primary"><i class="bi bi-pencil-square text-primary" ></i></a></td>
                       </tr>
                     {% endfor %}
                     </tbody>

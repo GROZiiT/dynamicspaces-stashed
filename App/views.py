@@ -39,11 +39,11 @@ def payment(request):
         user.subscriber = True
         user.save()
 
-        request.session['message'] = 'Payment Successful..!'
+        request.session['message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Payment Successful..!</b>'
         return HttpResponseRedirect("users-profile")
 
     except Exception as e:
-        request.session['message'] = 'Payment Unsuccessful..!Please contact admin or try again.'
+        request.session['message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> Payment Unsuccessful..!<br>Please contact admin or try again.</b>'
         return HttpResponseRedirect("users-profile")
 
 @register.simple_tag
@@ -54,11 +54,18 @@ def logged_in(request):
     try:
         profile = Profiles.objects.get(email=request.session['email'])
         fernet = Fernet(profile.key.encode('utf-8'))
-        if(profile.password == fernet.decrypt(request.session['password']).decode()):
+        if(profile.password == fernet.decrypt(request.session['password'].encode()).decode('utf-8')):
             return True
     except Exception as e:
         print(e)
         return False
+
+def message_check(request):
+    msg=""
+    if "message" not in request.session.keys():
+        request.session["message"]=""
+    msg,request.session["message"]=request.session["message"],""
+    return msg
 
 def register(request):
     try:
@@ -71,16 +78,21 @@ def register(request):
         profile.name = request.POST['name']
         profile.key = Fernet.generate_key().decode('utf-8')
         profile.save()
+        request.session['message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Successfully created your account!</b>'
         return HttpResponseRedirect('pages-login')
     except Exception as e:
         print(e)
-        return render(request, "pages-register.html")
+        request.session['message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> There is an error creating your account<br>Please try again or Contact us</b>'
+        return HttpResponseRedirect(request, "pages-register")
 
 def login(request):
     try:
         profile = Profiles.objects.get(email=request.POST['email'])
         if(profile.password == request.POST['password']):
             request.session['email']= profile.email
+            request.session['username'] = profile.username
+            request.session['role'] = profile.job
+            request.session['pp'] = profile.img_url
             fernet = Fernet(profile.key.encode('utf-8'))
             request.session['password'] = fernet.encrypt(profile.password.encode()).decode('utf-8')
             return HttpResponseRedirect('index')
@@ -88,7 +100,7 @@ def login(request):
             raise Exception
     except Exception as e:
         print(e)
-        request.session['message'] = "The Username or password is incorret, please try again"
+        request.session['message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> Incorret Credentials<br>Please try again.</b>'
         return HttpResponseRedirect('pages-login')
 
 def logout(request):
@@ -111,17 +123,18 @@ def index(request):
         return HttpResponseRedirect('pages-login')
 
     jobs=Jobs.objects.filter(posted_by=request.session['email'])
-    return render(request, "index.html",{'jobs':jobs})
+    return render(request, "index.html",{'jobs':jobs,'username':request.session["username"],'role':request.session['role'],"pp":request.session['pp'],"msg":message_check(request)})
 
 def add_post(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
-    return render(request, "add-post.html")
+    return render(request, "add-post.html",{'username':request.session["username"],'role':request.session['role'],"pp":request.session['pp']})
 
 def edit_post(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
-    return render(request, "add-post.html")
+    job = Jobs.objects.get(id=request.GET["id"])
+    return render(request, "edit-post.html",{'job':job,'username':request.session["username"],'role':request.session['role'],"pp":request.session['pp']})
 
 def adding_job(request):
     if not logged_in(request):
@@ -149,7 +162,7 @@ def editing_job(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
     try:
-        job =Jobs()
+        job =Jobs.objects.get(id=request.POST["id"])
         job.title=request.POST['title']
         job.sdescription = request.POST['sdescription']
         job.description = request.POST['description']
@@ -157,15 +170,19 @@ def editing_job(request):
         job.eemail = request.POST['eemail']
         job.company = request.POST['company']
         job.logo_img_url = request.POST['logo_img_url']
-        job.expire_in_days = request.POST['expire_in_days']
+        # job.expire_in_days = request.POST['expire_in_days']
         job.background_img_url = request.POST['background_img_url']
         job.keywords = request.POST['keywords']
         job.posted_by= request.session['email']
         job.save()
+        request.session[
+            'message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Successfully edited the Job!</b>'
         return HttpResponseRedirect('index')
     except Exception as e:
         print(e)
-        return HttpResponseRedirect('add-post')
+        request.session[
+            'message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> Error Editing<br>Please try again.</b>'
+        return HttpResponseRedirect('edit-post')
 
 def GroziitDynamicSpace(request):
     if not logged_in(request):
@@ -289,18 +306,11 @@ def pages_faq(request):
 
 
 def pages_login(request):
-    try:
-        if request.session["message"]!="":
-            message= request.session["message"]
-            request.session["message"] = ""
-            return render(request, "pages-login.html", {"message":message})
-    except:
-        pass
-    return render(request, "pages-login.html")
+    return render(request, "pages-login.html",{"msg":message_check(request)})
 
 
 def pages_register(request):
-    return render(request, "pages-register.html")
+    return render(request, "pages-register.html",{"msg",message_check(request)})
 
 
 def tables_data(request):
@@ -315,16 +325,13 @@ def users_profile(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
 
-    if "message" not in request.session.keys():
-        request.session["message"]=""
-    msg,request.session["message"]=request.session["message"],""
-    return render(request, "users-profile.html",{"msg":msg,"profile":Profiles.objects.get(email=request.session['email'])})
+    return render(request, "users-profile.html",{"msg":message_check(request),"profile":Profiles.objects.get(email=request.session['email']),'username':request.session["username"],'role':request.session['role'],"pp":request.session['pp']})
 
 def cancelsub(request):
     if not logged_in(request):
         return HttpResponseRedirect('pages-login')
     try:
-        user = Profiles.objects.get(username=request.session['email'])
+        user = Profiles.objects.get(email=request.session['email'])
 
         headers = {
             'Content-Type': 'application/json',
@@ -341,6 +348,9 @@ def cancelsub(request):
             json=json_data,
         )
 
+        print(user.subscriber_id )
+        print(response.status_code)
+
         if response.status_code != 204:
             raise Exception
 
@@ -348,9 +358,10 @@ def cancelsub(request):
         user.subscriber_id = ""
         user.save()
 
-        request.session['message'] = 'Successfully cancelled Subscription'
+        request.session['message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Successfully cancelled Subscription</b>'
         return HttpResponseRedirect("users-profile")
 
     except Exception as e:
-        request.session['message'] = 'There is an error cancelling the Subscription, please try again or Contact us'
+        print(e)
+        request.session['message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> There is an error cancelling the Subscription<br>Please try again or Contact us</b>'
         return HttpResponseRedirect("users-profile")

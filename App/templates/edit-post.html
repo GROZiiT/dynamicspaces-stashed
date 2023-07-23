@@ -27,11 +27,11 @@
 <main id="main" class="main">
 
     <div class="Jobposting">
-        <h1>Add Job Posting</h1>
+        <h1>Edit Job Posting</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index">Home</a></li>
-                <li class="breadcrumb-item active">Add Posting</li>
+                <li class="breadcrumb-item active">Edit Posting</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -43,7 +43,7 @@
             <div class="col-lg-12">
 
                 <!-- Profile Edit Form -->
-                <form method="post" action="adding-job">
+                <form method="post" action="editing-job">
                     {% csrf_token %}
                     {#                    <div class="row mb-3">#}
                     {#                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>#}
@@ -61,21 +61,21 @@
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="title" type="text" class="form-control" id="title" value="" required>
+                            <input name="title" type="text" class="form-control" id="title" value="{{ job.title }}" required>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Company Name</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="company" type="text" class="form-control" id="company" value="" required>
+                            <input name="company" type="text" class="form-control" id="company" value="{{ job.company }}" required>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Description Gist</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="sdescription" type="text" class="form-control" id="sdescription" value=""
+                            <input name="sdescription" type="text" class="form-control" id="sdescription" value="{{ job.sdescription }}"
                                    required>
                         </div>
                     </div>
@@ -89,6 +89,8 @@
                                 <input name="description" id="description" type="hidden">
                                 <script>
                                     CKEDITOR.replace('ckdescription');
+                                    var data= `{{ job.description|safe }}`
+                                    CKEDITOR.instances["ckdescription"].setData(data);
                                 </script>
                             </div>
                         </div>
@@ -97,14 +99,14 @@
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Location</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="location" type="text" class="form-control" id="location" value="" required>
+                            <input name="location" type="text" class="form-control" id="location" value="{{ job.location }}" required>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Employer Email</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="eemail" type="text" class="form-control" id="eemail" value="" required>
+                            <input name="eemail" type="text" class="form-control" id="eemail" value="{{ job.eemail }}" required>
                         </div>
                     </div>
 
@@ -112,34 +114,35 @@
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Keywords</label>
                         <div class="col-md-8 col-lg-9">
                             <input name="keywords" type="text" class="form-control" id="keywords"
-                                   placeholder="Python,Full Stack,etc.(comma-separated values)">
+                                   placeholder="Python,Full Stack,etc.(comma-separated values)" value="{{ job.keywords }}">
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Logo Image URL</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="logo_img_url" type="text" class="form-control" id="logo_img_url">
+                            <input name="logo_img_url" type="text" class="form-control" id="logo_img_url" value="{{ job.logo_img_url }}">
+                            <input name="id" type="hidden" class="form-control" id="id" value="{{ job.id }}" >
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Background Image URL</label>
                         <div class="col-md-8 col-lg-9">
-                            <input name="background_img_url" type="text" class="form-control" id="background_img_url">
+                            <input name="background_img_url" type="text" class="form-control" id="background_img_url" value="{{ job.background_img_url }}">
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Due Date</label>
-                        <div class="col-md-8 col-lg-9">
-                            <input name="expire_in_days" type="date" class="form-control" id="expire_in_days" value="">
-                        </div>
-                    </div>
+{#                    <div class="row mb-3">#}
+{#                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Job Due Date</label>#}
+{#                        <div class="col-md-8 col-lg-9">#}
+{#                            <input name="expire_in_days" type="date" class="form-control" id="expire_in_days" value="{{ job.expire_in_days }}">#}
+{#                        </div>#}
+{#                    </div>#}
 
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary" id="submit">Add Job</button>
+                        <button type="submit" class="btn btn-primary" id="submit">Edit Job</button>
                         <script>
                             $("#submit").click(function () {
                                 $("#description").val(CKEDITOR.instances['ckdescription'].getData());
