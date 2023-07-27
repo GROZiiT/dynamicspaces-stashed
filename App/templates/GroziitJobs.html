@@ -1090,17 +1090,23 @@
                 <script>
                     $("#searchbar").on('keyup', function () {
                         var value = $(this).val().toLowerCase();
-                        var jobs = 0;
                         $(".job-card").each(function () {
                             if ($(this).text().toLowerCase().search(value) > -1) {
                                 $(this).show();
-                                jobs = jobs + 1;
                                 $(this).prev('.subjectName').last().show();
                             } else {
                                 $(this).hide();
                             }
                         });
-                        $("#njobs").html("Showing " + jobs + " Jobs");
+                        $("#njobs").html("Showing " + $(".job-card:visible").length + " Jobs");
+                        if($(".job-card:visible").length==0)
+                        {
+                            $("#no-results").show();
+                        }
+                        else
+                        {
+                            $("#no-results").hide();
+                        }
                     });
                 </script>
             </div>
@@ -1142,11 +1148,18 @@
                     {#                    <div class="searched-sort">Sort by: <span class="post-time">Newest Post </span><span#}
                     {#                            class="menu-icon">▼</span></div>#}
                 </div>
+                <div id="no-results"
+                     style="display: none;margin-left: auto;margin-right: auto;background-color: #f6f9ff;">
+                    <img src="{% static '/assets/img/no-results.svg' %}"
+                         style="width: 40vw;display: block;margin-left: auto;margin-right: auto;"/>
+                    <div class="searched-show" style="text-align: center;font-size: 3vw">No Results found..</div>
+                </div>
                 <div class="job-cards">
                     {% for i in jobs %}
                         <div class="job-card">
                             <div class="job-card-header">
-                                <img src="{{ i.logo_img_url }}" style="object-fit: cover;width: 50px;height: 50px;background: whitesmoke">
+                                <img src="{{ i.logo_img_url }}"
+                                     style="object-fit: cover;width: 50px;height: 50px;background: whitesmoke">
                                 {#                            <div class="menu-dot"></div>#}
                             </div>
                             <div class="job-card-title">{{ i.title }}</div>
@@ -1161,8 +1174,12 @@
                                 {#                                {% endwith %}#}
                             </div>
                             <div class="job-card-buttons">
-                                <button class="search-buttons card-buttons apply" data="postdetail?job={{ i.id }}">Apply Now</button>
-                                <button class="search-buttons card-buttons-msg" id="detail" href="postdetail?job={{ i.id }}">View More..</button>
+                                <button class="search-buttons card-buttons apply" data="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/postdetail?job={{ i.id }}&data={{ request.GET.data}}">Apply
+                                    Now
+                                </button>
+                                <button class="search-buttons card-buttons-msg" id="detail"
+                                        href="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/postdetail?job={{ i.id }}&data={{ request.GET.data}}">View More..
+                                </button>
                             </div>
                         </div>
                     {% endfor %}

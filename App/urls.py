@@ -48,5 +48,5 @@ urlpatterns = [
     path('tables-data', views.tables_data, name="tables-data"),
     path('tables-general', views.tables_general, name="tables-general"),
     path('users-profile', views.users_profile, name="users-profile"),
-
+    # path('dynamicspace', views.)
 ]

@@ -16,7 +16,8 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <script src="https://www.paypal.com/sdk/js?client-id=AZbjl24UxpurpCWivsPxyAYCbHNkoTgoPxMcHXp0vlEWItKQ_s1PY9YTAXqk540STaqwzKrzihlMCnw0&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AamB-Te52PnmRJKM7rmroLZ_m7j9voNh9aqkqSkvBKx0kWX_64LqTwbBr9k8b8oXzi2S7LCHGu-b6umZ&vault=true&intent=subscription"
+            data-sdk-integration-source="button-factory"></script>
 
     {% include 'alerts.html' %}
 
@@ -125,17 +126,17 @@
                                 <!-- Profile Edit Form -->
                                 <form>
                                     <div class="row mb-3">
-{#                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile#}
-{#                                            Image</label>#}
-{#                                        <div class="col-md-8 col-lg-9">#}
-{#                                            <img src="{{ pp }}" alt="Profile">#}
-{#                                            <div class="pt-2">#}
-{#                                                <a href="#" class="btn btn-primary btn-sm"#}
-{#                                                   title="Upload new profile image"><i class="bi bi-upload"></i></a>#}
-{#                                                <a href="#" class="btn btn-danger btn-sm"#}
-{#                                                   title="Remove my profile image"><i class="bi bi-trash"></i></a>#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile#}
+                                        {#                                            Image</label>#}
+                                        {#                                        <div class="col-md-8 col-lg-9">#}
+                                        {#                                            <img src="{{ pp }}" alt="Profile">#}
+                                        {#                                            <div class="pt-2">#}
+                                        {#                                                <a href="#" class="btn btn-primary btn-sm"#}
+                                        {#                                                   title="Upload new profile image"><i class="bi bi-upload"></i></a>#}
+                                        {#                                                <a href="#" class="btn btn-danger btn-sm"#}
+                                        {#                                                   title="Remove my profile image"><i class="bi bi-trash"></i></a>#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
 
                                     <div class="row mb-3">
@@ -158,14 +159,16 @@
                                     <div class="row mb-3">
                                         <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="{{ profile.job }}">
+                                            <input name="job" type="text" class="form-control" id="Job"
+                                                   value="{{ profile.job }}">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="{{ profile.email }}" readonly>
+                                            <input name="email" type="email" class="form-control" id="Email"
+                                                   value="{{ profile.email }}" readonly>
                                         </div>
                                     </div>
 
@@ -180,45 +183,52 @@
 
                                 <!-- Settings Form -->
                                 {% if not profile.subscriber %}
-                                    <div id="paypal-button-container-P-75N56681D6598294AMS6WB6A"
+                                    <div id="paypal-button-container-P-5YC382822J373372HMTATEAQ"
                                          class="col-lg-6 mx-auto">
-                                    <form method="post" action="payment" id="paymentform">
-                                        {% csrf_token %}
-                                        <input type="hidden" id="subscriptionID" name="subscriptionID">
-                                    </form>
+                                        <form method="post" action="payment" id="paymentform">
+                                            {% csrf_token %}
+                                            <input type="hidden" id="subscriptionID" name="subscriptionID">
+                                        </form>
                                         <h5 class="card-title" style="text-align: center">Choose a payment method</h5>
                                         <script>
                                             paypal.Buttons({
                                                 style: {
                                                     shape: 'rect',
-                                                    color: 'gold',
+                                                    color: 'silver',
                                                     layout: 'vertical',
                                                     label: 'subscribe'
                                                 },
                                                 createSubscription: function (data, actions) {
                                                     return actions.subscription.create({
                                                         /* Creates the subscription */
-                                                        plan_id: 'P-75N56681D6598294AMS6WB6A'
+                                                        plan_id: 'P-5YC382822J373372HMTATEAQ'
                                                     });
                                                 },
                                                 onApprove: function (data, actions) {
                                                     $("#subscriptionID").val(data.subscriptionID);
                                                     $("#paymentform").submit();
                                                 }
-                                            }).render('#paypal-button-container-P-75N56681D6598294AMS6WB6A'); // Renders the PayPal button
+                                            }).render('#paypal-button-container-P-5YC382822J373372HMTATEAQ'); // Renders the PayPal button
                                         </script>
                                     </div>
                                 {% else %}
                                     <form action="cancelsub" method="post">
-                                    {% csrf_token %}
+                                        {% csrf_token %}
                                         <div class="row mb-3">
                                             <h5 class="card-title" style="text-align: center">Subscription Settings</h5>
 
                                             <div class="col-md-8 col-lg-9 mx-auto mb-3">
 
-                                                    <label class="form-check-label" for="changesMade">
-                                                        <b>Subscription Status :</b> <i class="bi bi-check-circle-fill" style="color: green"></i> Active
-                                                    </label>
+                                                <label class="form-check-label" for="changesMade">
+                                                    <b>Subscription Status :</b> <i class="bi bi-check-circle-fill"
+                                                                                    style="color: green"></i> Active
+                                                </label>
+                                                <br>
+                                                <label class="form-check-label" for="changesMade">
+                                                    <b>Iframe Link :</b> <a
+                                                        href="http{% if request.is_secure %}s{% endif %}://{{ request.get_host }}/GroziitDynamicSpace?data={{ iframe }}"
+                                                        style="width:150px;overflow: scroll">Click here!</a>
+                                                </label>
 
                                             </div>
 

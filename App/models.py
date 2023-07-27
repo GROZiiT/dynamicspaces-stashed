@@ -1,6 +1,7 @@
 from django.db import models
 import time
 from ckeditor.fields import RichTextField
+from django.utils import timezone
 from datetime import datetime
 # Create your models here.
 class Jobs(models.Model):
@@ -14,7 +15,7 @@ class Jobs(models.Model):
     location=models.CharField(max_length=500)
     eemail = models.CharField(max_length=500)
     expire_in_days=models.DateField()
-    time=models.DateField(editable=False,default=datetime.now())
+    time=models.DateField(editable=False,default=timezone.now)
     posted_by=models.CharField(max_length=500)
 
 class Profiles(models.Model):
