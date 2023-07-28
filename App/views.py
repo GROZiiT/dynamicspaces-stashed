@@ -116,7 +116,7 @@ def register(request):
         profile.username = request.POST['username']
         profile.password = request.POST['password']
         profile.job = request.POST['job']
-        profile.name = request.POST['name']
+        profile.company = request.POST['company']
         profile.key = Fernet.generate_key().decode('utf-8')
         profile.save()
         request.session[
@@ -420,7 +420,7 @@ def pages_login(request):
 
 
 def pages_register(request):
-    return render(request, "pages-register.html", {"msg", message_check(request)})
+    return render(request, "pages-register.html", {"msg": message_check(request)})
 
 
 def tables_data(request):
@@ -485,3 +485,37 @@ def cancelsub(request):
         request.session[
             'message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> There is an error cancelling the Subscription<br>Please try again or Contact us</b>'
         return HttpResponseRedirect("users-profile")
+
+def edit_profile(request):
+    if not logged_in(request):
+        return HttpResponseRedirect('pages-login')
+    try:
+        profile = Profiles(email=request.session["email"])
+        profile.username = request.POST['username']
+        profile.job = request.POST['job']
+        profile.company = request.POST['company']
+        profile.save()
+        request.session[
+            'message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Changes made Successfully !</b>'
+        return HttpResponseRedirect('pages-profile')
+    except Exception as e:
+        print(e)
+        request.session[
+            'message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> There is an error changing your details<br>Please try again or Contact us</b>'
+        return HttpResponseRedirect(request, "pages-profile")
+
+def change_password(request):
+    if not logged_in(request):
+        return HttpResponseRedirect('pages-login')
+    try:
+        profile = Profiles(email=request.session["email"])
+        profile.password = request.POST['password']
+        profile.save()
+        request.session[
+            'message'] = '<b> <i class="bi bi-check-circle-fill" style="color: green"></i> Successfully change account password!</b>'
+        return HttpResponseRedirect('pages-profile')
+    except Exception as e:
+        print(e)
+        request.session[
+            'message'] = '<b> <i class="bi bi-x-circle-fill" style="color: red"></i> There is an error changing password<br>Please try again or Contact us</b>'
+        return HttpResponseRedirect(request, "pages-profile")

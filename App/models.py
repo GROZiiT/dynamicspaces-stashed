@@ -23,7 +23,7 @@ class Profiles(models.Model):
     email = models.CharField(max_length=500,unique=True)
     username = models.CharField(max_length=500)
     password = models.CharField(max_length=500)
-    comapny = models.CharField(max_length=500)
+    company = models.CharField(max_length=500)
     job = models.CharField(max_length=500)
     email_verfied = models.BooleanField(default=False)
     subscriber = models.BooleanField(default=False)
