@@ -5,7 +5,17 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('index', views.index, name='index'),
-path('add-post', views.add_post, name='add-post'),
+    path('add-post', views.add_post, name='add-post'),
+    path('edit-post', views.edit_post, name='edit-post'),
+    path('adding-job', views.adding_job, name='adding-job'),
+    path('editing-job', views.editing_job, name='editing-job'),
+    path('GroziitDynamicSpace', views.GroziitDynamicSpace, name='GroziitDynamicSpace'),
+    path('postdetail', views.postdetail, name='postdetail'),
+    path('payment', views.payment, name='payment'),
+    path('cancelsub', views.cancelsub, name='cancelsub'),
+    path('register', views.register, name='register'),
+    path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('charts-apexcharts', views.charts_apexcharts, name="charts-apexcharts"),
     path('charts-chartjs', views.charts_chartjs, name="charts-chartjs"),
     path('charts-echarts', views.charts_echarts, name="charts-echarts"),
@@ -38,5 +48,5 @@ path('add-post', views.add_post, name='add-post'),
     path('tables-data', views.tables_data, name="tables-data"),
     path('tables-general', views.tables_general, name="tables-general"),
     path('users-profile', views.users_profile, name="users-profile"),
-
+    # path('dynamicspace', views.)
 ]
