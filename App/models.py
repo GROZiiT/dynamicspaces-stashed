@@ -30,4 +30,4 @@ class Profiles(models.Model):
     subscriber_id = models.CharField(max_length=500,default="")
     key = models.CharField(max_length=500)
     img_url = models.CharField(max_length=500,default="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg")
-    #profile_pic = models.ImageField(upload_to='images')
+    profile_pic = models.ImageField(upload_to='images')
