@@ -16,7 +16,7 @@ class Jobs(models.Model):
     eemail = models.CharField(max_length=500)
     expire_in_days=models.DateField()
     time=models.DateField(editable=False,default=timezone.now)
-    posted_by=models.CharField(max_length=500)
+    posted_by=models.CharField(max_length=600)
 
 class Profiles(models.Model):
     name = models.CharField(max_length=500)
