@@ -48,7 +48,5 @@ urlpatterns = [
     path('tables-data', views.tables_data, name="tables-data"),
     path('tables-general', views.tables_general, name="tables-general"),
     path('users-profile', views.users_profile, name="users-profile"),
-    path('edit-profile', views.edit_profile, name="edit_profile"),
-    path('change-password', views.change_password, name="change-password"),
     # path('dynamicspace', views.)
 ]
