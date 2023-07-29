@@ -420,7 +420,7 @@ def pages_login(request):
 
 
 def pages_register(request):
-    return render(request, "pages-register.html", {"msg", message_check(request)})
+    return render(request, "pages-register.html", {"msg": message_check(request)})
 
 
 def tables_data(request):
